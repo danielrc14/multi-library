@@ -1,0 +1,4 @@
+.LibraryItemList{
+    display: flex;
+    flex-wrap: wrap;
+}
