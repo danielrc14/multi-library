@@ -6,18 +6,11 @@ import LibraryItem from './LibraryItem/LibraryItem';
 const libraryItemList = props => {
     return(
         <div className='LibraryItemList'>
-            <LibraryItem/>
-            <LibraryItem/>
-            <LibraryItem/>
-            <LibraryItem/>
-            <LibraryItem/>
-            <LibraryItem/>
-            <LibraryItem/>
-            <LibraryItem/>
-            <LibraryItem/>
-            <LibraryItem/>
-            <LibraryItem/>
-            <LibraryItem/>
+            {props.itemList.map(item => {
+                return <LibraryItem
+                    key={item.id}
+                    item={item}/>
+            })}
         </div>
     )
 };

@@ -1,0 +1,12 @@
+.LibraryItem{
+    width: 350px;
+    height: 200px;
+    margin: 16px;
+    display: flex;
+}
+
+.LibraryItem img{
+    height: 200px;
+    width: auto;
+    max-width: 133.33px;
+}

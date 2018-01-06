@@ -6,7 +6,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {red500} from 'material-ui/styles/colors';
 
 import Layout from './hoc/Layout/Layout';
-import Games from './components/Games/Games';
+import Movies from './components/Movies/Movies';
 
 class App extends Component {
     render() {
@@ -21,7 +21,7 @@ class App extends Component {
             <div>
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <Layout>
-                        <Games/>
+                        <Movies/>
                     </Layout>
                 </MuiThemeProvider>
             </div>

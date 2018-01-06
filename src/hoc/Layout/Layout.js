@@ -1,7 +1,6 @@
 import React from 'react';
 
 import './Layout.css';
-import Wrapper from '../Wrapper/Wrapper';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 
