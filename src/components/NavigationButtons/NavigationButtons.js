@@ -9,13 +9,13 @@ const navigationButtons = props => {
     //First button
     if(props.page >= 5 && props.totalPages >= 8){
         buttons.push(
-            <FlatButton onClick={() => props.changePage(1)} style={{minWidth: 0}} label='1'/>
+            <FlatButton key='1' onClick={() => props.changePage(1)} style={{minWidth: 0}} label='1'/>
         );
     }
 
     //...
     if(props.page >= 6 && props.totalPages >= 9){
-        buttons.push(<span>...</span>);
+        buttons.push(<span key='first...'>...</span>);
     }
 
     let firstPage = 0;
@@ -37,27 +37,27 @@ const navigationButtons = props => {
 
     for(let i=firstPage; i < props.page; i++){
         buttons.push(
-            <FlatButton onClick={() => props.changePage(i)} style={{minWidth: 0}} label={i}/>
+            <FlatButton key={i} onClick={() => props.changePage(i)} style={{minWidth: 0}} label={i}/>
         )
     }
     buttons.push(
-        <FlatButton onClick={() => props.changePage(props.page)} style={{minWidth: 0}} label={props.page} disabled/>
+        <FlatButton key={props.page} onClick={() => props.changePage(props.page)} style={{minWidth: 0}} label={props.page} disabled/>
     );
     for(let i=props.page + 1; i <= lastPage; i++){
         buttons.push(
-            <FlatButton onClick={() => props.changePage(i)} style={{minWidth: 0}} label={i}/>
+            <FlatButton key={i} onClick={() => props.changePage(i)} style={{minWidth: 0}} label={i}/>
         )
     }
 
     //...
     if(props.page <= props.totalPages - 5 && props.totalPages >= 9){
-        buttons.push(<span>...</span>);
+        buttons.push(<span key='last...'>...</span>);
     }
 
     //Last button
     if(props.page <= props.totalPages - 4 && props.totalPages >= 8){
         buttons.push(
-            <FlatButton onClick={() => props.changePage(props.totalPages)} style={{minWidth: 0}} label={props.totalPages}/>
+            <FlatButton key={props.totalPages} onClick={() => props.changePage(props.totalPages)} style={{minWidth: 0}} label={props.totalPages}/>
         );
     }
 
@@ -65,9 +65,9 @@ const navigationButtons = props => {
 
     return (
         <div className='NavigationButtons'>
-            <FlatButton onClick={() => props.changePage(props.page-1)} style={{minWidth: 0}} label='<' disabled={props.page === 1}/>
+            <FlatButton key='<' onClick={() => props.changePage(props.page-1)} style={{minWidth: 0}} label='<' disabled={props.page === 1}/>
             {buttons}
-            <FlatButton onClick={() => props.changePage(props.page+1)} style={{minWidth: 0}} label='>' disabled={props.page === props.totalPages}/>
+            <FlatButton key='>' onClick={() => props.changePage(props.page+1)} style={{minWidth: 0}} label='>' disabled={props.page === props.totalPages}/>
         </div>
     );
 };

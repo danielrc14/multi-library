@@ -7,6 +7,5 @@
 
 .LibraryItem img{
     height: 200px;
-    width: auto;
-    max-width: 133.33px;
+    width: 133.33px;
 }

@@ -6,13 +6,20 @@ import {red500} from 'material-ui/styles/colors';
 import './LibraryItem.css';
 
 const libraryItem = props => {
-    const imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
+    let subtitle = '';
+
+    if(props.item.authors){
+        subtitle = props.item.authors.join(', ');
+    }
+    else if(props.item.releaseDate){
+        subtitle = props.item.releaseDate.split('-')[0]
+    }
 
     return(
         <div className='LibraryItem'>
-            <img src={imageBaseUrl + props.item.posterPath} alt="" />
+            <img src={props.item.imagePath} alt="" />
             <Card containerStyle={{height: '200px', width: '216.67px'}}>
-                <CardHeader textStyle={{paddingRight: '0'}} title={props.item.title} subtitle={props.item.releaseDate.split('-')[0]} />
+                <CardHeader textStyle={{paddingRight: '0'}} title={props.item.title} subtitle={subtitle} />
                 <CardText>
                     Rating: {props.item.rating}
                 </CardText>
