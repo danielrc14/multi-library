@@ -7,7 +7,6 @@ const initialState = {
     userEmail: null,
     error: null,
     loading: false,
-    authRedirectPath: '/',
     loggingIn: false,
     registering: false
 };
@@ -48,10 +47,6 @@ const authLogout = (state, action) => {
     })
 };
 
-const setAuthRedirectPath = (state, action) => {
-    return updateObject(state, {authRedirectPath: action.path})
-};
-
 const openLoginModal = (state, action) => {
     return updateObject(state, {loggingIn: true, registering: false})
 };
@@ -74,8 +69,6 @@ const reducer = (state=initialState, action) => {
             return authFail(state, action);
         case actionTypes.AUTH_LOGOUT:
             return authLogout(state, action);
-        case actionTypes.SET_AUTH_REDIRECT_PATH:
-            return setAuthRedirectPath(state, action);
         case actionTypes.OPEN_LOGIN_MODAL:
             return openLoginModal(state, action);
         case actionTypes.OPEN_REGISTER_MODAL:

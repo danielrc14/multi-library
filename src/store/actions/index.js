@@ -1,7 +1,6 @@
 export {
     auth,
     logout,
-    setAuthRedirectPath,
     authCheckState,
     openLoginModal,
     openRegisterModal,

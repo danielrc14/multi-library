@@ -76,13 +76,6 @@ export const auth = (userData, isSignup) => {
     };
 };
 
-export const setAuthRedirectPath = (path) => {
-    return {
-        type: actionTypes.SET_AUTH_REDIRECT_PATH,
-        path: path
-    }
-};
-
 export const openLoginModal = () => {
     return {
         type: actionTypes.OPEN_LOGIN_MODAL
