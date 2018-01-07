@@ -4,15 +4,14 @@ import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
-import axiosMovies from '../../axiosInstances/movies';
-import LibraryItemList from '../LibraryItemList/LibraryItemList';
-import NavigationButtons from '../NavigationButtons/NavigationButtons';
+import axiosBooks from '../../axiosInstances/books';
+import LibraryItemList from '../../components/LibraryItemList/LibraryItemList';
+import NavigationButtons from '../../components/NavigationButtons/NavigationButtons';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 
-class Movies extends Component{
+class Books extends Component{
     state = {
-        movies: [],
-        posterBaseURL: 'https://image.tmdb.org/t/p/w500',
+        books: [],
         searchStr: '',
         page: 1,
         totalPages: 1
@@ -30,25 +29,26 @@ class Movies extends Component{
     };
 
     searchSubmittedHandler = (page) => {
-        axiosMovies.get('/search/movie', {
+        axiosBooks.get('/volumes', {
             params: {
-                query: this.state.searchStr.trim(),
-                page: page
+                q: this.state.searchStr.trim(),
+                startIndex: (page-1)*20,
+                maxResults: 20
             }
         })
             .then(response => {
-                console.log(response.data);
-                const newMovies = response.data.results.map(result => {
+                const newBooks = response.data.items.map(result => {
                     return {
                         id: result.id,
-                        title: result.title,
-                        imagePath: this.state.posterBaseURL + result.poster_path,
-                        rating: result.vote_average,
-                        releaseDate: result.release_date
+                        title: result.volumeInfo.title,
+                        authors: result.volumeInfo.authors,
+                        imagePath: result.volumeInfo.imageLinks ? result.volumeInfo.imageLinks.thumbnail : null,
+                        rating: result.volumeInfo.averageRating,
+                        releaseDate: result.volumeInfo.publishedDate
                     }
                 });
-                this.setState({movies: newMovies});
-                this.setState({totalPages: response.data.total_pages});
+                this.setState({books: newBooks});
+                this.setState({totalPages: Math.ceil(response.data.totalItems)});
             })
     };
 
@@ -61,11 +61,11 @@ class Movies extends Component{
     render(){
         let searchResults = null;
 
-        if(this.state.movies.length > 0){
+        if(this.state.books.length > 0){
             searchResults = (
                 <Wrapper>
                     <hr/>
-                    <LibraryItemList itemList={this.state.movies}/>
+                    <LibraryItemList itemList={this.state.books}/>
                     <hr/>
                     <NavigationButtons
                         page={this.state.page}
@@ -85,7 +85,7 @@ class Movies extends Component{
 
         return (
             <div>
-                <h1>Movies</h1>
+                <h1>Books</h1>
                 <Paper style={paperStyle} zDepth={3}>
                     <TextField
                         value={this.state.searchStr}
@@ -103,4 +103,4 @@ class Movies extends Component{
     }
 }
 
-export default Movies;
+export default Books;
