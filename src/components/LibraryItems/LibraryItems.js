@@ -1,18 +1,20 @@
 import React from 'react';
 
-import './LibraryItemList.css';
+import './LibraryItems.css';
 import LibraryItem from './LibraryItem/LibraryItem';
 
-const libraryItemList = props => {
+const libraryItems = props => {
     return(
-        <div className='LibraryItemList'>
+        <div className='LibraryItems'>
             {props.itemList.map(item => {
                 return <LibraryItem
                     key={item.id}
-                    item={item}/>
+                    item={item}
+                    removeHandler={props.removeHandler}
+                />
             })}
         </div>
     )
 };
 
-export default libraryItemList;
+export default libraryItems;

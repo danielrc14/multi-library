@@ -8,6 +8,9 @@ import './SideDrawer.css';
 const sideDrawer = props => {
     return (
         <Drawer containerClassName='SideDrawer'>
+            <NavLink to='/library'>
+                <MenuItem>My Library</MenuItem>
+            </NavLink>
             <NavLink to='/movies'>
                 <MenuItem>Movies</MenuItem>
             </NavLink>

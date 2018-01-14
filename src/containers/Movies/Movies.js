@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
 import axiosMovies from '../../axiosInstances/movies';
-import LibraryItemList from '../../components/LibraryItemList/LibraryItemList';
+import axiosDatabase from '../../axiosInstances/database';
+import SearchItems from '../../components/SearchItems/SearchItems';
 import NavigationButtons from '../../components/NavigationButtons/NavigationButtons';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 
@@ -46,8 +48,10 @@ class Movies extends Component{
                         releaseDate: result.release_date
                     }
                 });
-                this.setState({movies: newMovies});
-                this.setState({totalPages: response.data.total_pages});
+                this.setState({
+                    movies: newMovies,
+                    totalPages: response.data.total_pages
+                });
             })
     };
 
@@ -57,6 +61,20 @@ class Movies extends Component{
         }
     };
 
+    addToLibraryHandler = movie => {
+        axiosDatabase.post('/libraryItems.json?auth='+this.props.token, {
+            elemInfo: {...movie},
+            type: 'movie',
+            userId: this.props.userId
+        })
+            .then(response => {
+                console.log(response)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    };
+
     render(){
         let searchResults = null;
 
@@ -64,7 +82,10 @@ class Movies extends Component{
             searchResults = (
                 <Wrapper>
                     <hr/>
-                    <LibraryItemList itemList={this.state.movies}/>
+                    <SearchItems
+                        itemList={this.state.movies}
+                        addHandler={this.addToLibraryHandler}
+                    />
                     <hr/>
                     <NavigationButtons
                         page={this.state.page}
@@ -102,4 +123,11 @@ class Movies extends Component{
     }
 }
 
-export default Movies;
+const mapStateToProps = state => {
+    return {
+        token: state.auth.token,
+        userId: state.auth.userId
+    }
+};
+
+export default connect(mapStateToProps)(Movies);

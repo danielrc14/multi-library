@@ -46,7 +46,6 @@ export const checkAuthTimeout = (expirationTime) => {
 export const auth = (userData, isSignup) => {
     return dispatch => {
         dispatch(authStart(isSignup));
-        console.log(userData);
         if(isSignup && userData.password !== userData.confirmPassword){
             dispatch(authFail({message: "Password doesn't match"}));
             return;

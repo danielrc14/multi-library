@@ -1,0 +1,11 @@
+.SearchItem{
+    width: 350px;
+    height: 200px;
+    margin: 16px;
+    display: flex;
+}
+
+.SearchItem img{
+    height: 200px;
+    width: 133.33px;
+}

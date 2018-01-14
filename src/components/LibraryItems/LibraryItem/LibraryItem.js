@@ -19,12 +19,20 @@ const libraryItem = props => {
         <div className='LibraryItem'>
             <img src={props.item.imagePath} alt="" />
             <Card containerStyle={{height: '200px', width: '216.67px'}}>
-                <CardHeader textStyle={{paddingRight: '0'}} title={props.item.title} subtitle={subtitle} />
+                <CardHeader
+                    textStyle={{paddingRight: '0'}}
+                    title={props.item.title}
+                    subtitle={subtitle}
+                />
                 <CardText>
                     Rating: {props.item.rating}
                 </CardText>
                 <CardActions>
-                    <FlatButton style={{color: red500}} label="Add to Library" />
+                    <FlatButton
+                        style={{color: red500}}
+                        label="Remove"
+                        onClick={() => props.removeHandler(props.item)}
+                    />
                 </CardActions>
             </Card>
         </div>

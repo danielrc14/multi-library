@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
 import axiosBooks from '../../axiosInstances/books';
-import LibraryItemList from '../../components/LibraryItemList/LibraryItemList';
+import axiosDatabase from '../../axiosInstances/database';
+import SearchItems from '../../components/SearchItems/SearchItems';
 import NavigationButtons from '../../components/NavigationButtons/NavigationButtons';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 
@@ -47,8 +49,10 @@ class Books extends Component{
                         releaseDate: result.volumeInfo.publishedDate
                     }
                 });
-                this.setState({books: newBooks});
-                this.setState({totalPages: Math.ceil(response.data.totalItems)});
+                this.setState({
+                    books: newBooks,
+                    totalPages: Math.ceil(response.data.totalItems)
+                });
             })
     };
 
@@ -58,6 +62,20 @@ class Books extends Component{
         }
     };
 
+    addToLibraryHandler = book => {
+        axiosDatabase.post('/libraryItems.json?auth='+this.props.token, {
+            elemInfo: {...book},
+            type: 'book',
+            userId: this.props.userId
+        })
+            .then(response => {
+                console.log(response)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    };
+
     render(){
         let searchResults = null;
 
@@ -65,7 +83,10 @@ class Books extends Component{
             searchResults = (
                 <Wrapper>
                     <hr/>
-                    <LibraryItemList itemList={this.state.books}/>
+                    <SearchItems
+                        itemList={this.state.books}
+                        addHandler={this.addToLibraryHandler}
+                    />
                     <hr/>
                     <NavigationButtons
                         page={this.state.page}
@@ -103,4 +124,11 @@ class Books extends Component{
     }
 }
 
-export default Books;
+const mapStateToProps = state => {
+    return {
+        token: state.auth.token,
+        userId: state.auth.userId
+    }
+};
+
+export default connect(mapStateToProps)(Books);
