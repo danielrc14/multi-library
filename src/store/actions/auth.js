@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import * as actionTypes from './actionTypes';
+import {fetchLibrary} from "./library";
 
 export const authStart = (isSignup) => {
     return {
@@ -68,6 +69,7 @@ export const auth = (userData, isSignup) => {
                 localStorage.setItem('userEmail', userData.email);
                 dispatch(authSuccess(response.data.idToken, response.data.localId, userData.email));
                 dispatch(checkAuthTimeout(response.data.expiresIn));
+                dispatch(fetchLibrary(response.data.idToken, response.data.localId))
             })
             .catch(err => {
                 dispatch(authFail(err.response.data.error));

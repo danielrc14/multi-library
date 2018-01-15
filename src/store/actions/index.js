@@ -6,3 +6,9 @@ export {
     openRegisterModal,
     closeModals
 } from './auth';
+export {
+    fetchLibrary,
+    addLibrary,
+    removeLibrary,
+    clearLibrary
+} from './library';

@@ -5,6 +5,7 @@ import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
+import * as actions from '../../store/actions';
 import axiosMovies from '../../axiosInstances/movies';
 import axiosDatabase from '../../axiosInstances/database';
 import SearchItems from '../../components/SearchItems/SearchItems';
@@ -62,17 +63,7 @@ class Movies extends Component{
     };
 
     addToLibraryHandler = movie => {
-        axiosDatabase.post('/libraryItems.json?auth='+this.props.token, {
-            elemInfo: {...movie},
-            type: 'movie',
-            userId: this.props.userId
-        })
-            .then(response => {
-                console.log(response)
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        this.props.onAddLibrary(this.props.token, movie, this.props.userId);
     };
 
     render(){
@@ -130,4 +121,10 @@ const mapStateToProps = state => {
     }
 };
 
-export default connect(mapStateToProps)(Movies);
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddLibrary: (token, item, userId) => dispatch(actions.addLibrary(token, item, 'movie', userId))
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Movies);

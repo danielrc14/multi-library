@@ -5,6 +5,7 @@ import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
+import * as actions from '../../store/actions';
 import axiosBooks from '../../axiosInstances/books';
 import axiosDatabase from '../../axiosInstances/database';
 import SearchItems from '../../components/SearchItems/SearchItems';
@@ -63,17 +64,7 @@ class Books extends Component{
     };
 
     addToLibraryHandler = book => {
-        axiosDatabase.post('/libraryItems.json?auth='+this.props.token, {
-            elemInfo: {...book},
-            type: 'book',
-            userId: this.props.userId
-        })
-            .then(response => {
-                console.log(response)
-            })
-            .catch(err => {
-                console.log(err);
-            })
+        this.props.onAddLibrary(this.props.token, book, this.props.userId);
     };
 
     render(){
@@ -131,4 +122,10 @@ const mapStateToProps = state => {
     }
 };
 
-export default connect(mapStateToProps)(Books);
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddLibrary: (token, item, userId) => dispatch(actions.addLibrary(token, item, 'book', userId))
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Books);

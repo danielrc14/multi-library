@@ -1,15 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
-import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
 
-import axiosMovies from '../../axiosInstances/movies';
 import axiosDatabase from '../../axiosInstances/database';
 import LibraryItems from '../../components/LibraryItems/LibraryItems';
-import NavigationButtons from '../../components/NavigationButtons/NavigationButtons';
-import Wrapper from '../../hoc/Wrapper/Wrapper';
+import * as actions from '../../store/actions';
 
 class Library extends Component{
     state = {
@@ -18,62 +12,11 @@ class Library extends Component{
     };
 
     componentDidMount(){
-        const queryParams = '?auth=' + this.props.token + '&orderBy="userId"&equalTo="' + this.props.userId + '"';
-        axiosDatabase.get('/libraryItems.json' + queryParams)
-            .then(response => {
-                const fetchedMovies = [];
-                const fetchedBooks = [];
-                for(let key in response.data){
-                    const item = response.data[key];
-                    if(item.type === 'movie'){
-                        fetchedMovies.push({
-                            ...item.elemInfo,
-                            id: key
-                        });
-                    }
-                    else if(item.type === 'book'){
-                        fetchedBooks.push({
-                            ...item.elemInfo,
-                            id: key
-                        });
-                    }
-                }
-
-                this.setState({
-                    movies: fetchedMovies,
-                    books: fetchedBooks
-                });
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        this.props.onFetchLibrary(this.props.token, this.props.userId)
     };
 
     removeItemHandler = (item, type) => {
-        let arrayName = '';
-        if(type === 'movie'){
-            arrayName = 'movies';
-        }
-        else if(type === 'book'){
-            arrayName = 'books';
-        }
-        const index = this.state[arrayName].indexOf(item);
-        const newArray = [
-            ...this.state[arrayName].slice(0, index),
-            ...this.state[arrayName].slice(index + 1)
-        ];
-
-        this.setState({
-            [arrayName]: newArray
-        });
-
-        axiosDatabase.delete('/libraryItems/' + item.id + '.json?auth=' + this.props.token)
-            .then(response => {
-                console.log(response);
-            })
-            .catch(err => {
-                console.log(err)
-            });
+        this.props.onRemoveLibrary(this.props.token, item, type)
     };
 
     render(){
@@ -83,13 +26,13 @@ class Library extends Component{
                 <h2>Movies</h2>
                 <hr/>
                 <LibraryItems
-                    itemList={this.state.movies}
+                    itemList={this.props.movies}
                     removeHandler={(item) => this.removeItemHandler(item, 'movie')}
                 />
                 <h2>Books</h2>
                 <hr/>
                 <LibraryItems
-                    itemList={this.state.books}
+                    itemList={this.props.books}
                     removeHandler={(item) => this.removeItemHandler(item, 'book')}
                 />
             </div>
@@ -100,8 +43,17 @@ class Library extends Component{
 const mapStateToProps = state => {
     return {
         token: state.auth.token,
-        userId: state.auth.userId
+        userId: state.auth.userId,
+        movies: state.library.movies,
+        books: state.library.books
     }
 };
 
-export default connect(mapStateToProps)(Library);
+const mapDispatchToProps = dispatch => {
+    return {
+        onFetchLibrary: (token, userId) => dispatch(actions.fetchLibrary(token, userId)),
+        onRemoveLibrary: (token, item, itemType) => dispatch(actions.removeLibrary(token, item, itemType))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Library);
