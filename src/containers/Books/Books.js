@@ -7,7 +7,6 @@ import FontIcon from 'material-ui/FontIcon';
 
 import * as actions from '../../store/actions';
 import axiosBooks from '../../axiosInstances/books';
-import axiosDatabase from '../../axiosInstances/database';
 import SearchItems from '../../components/SearchItems/SearchItems';
 import NavigationButtons from '../../components/NavigationButtons/NavigationButtons';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
@@ -76,7 +75,9 @@ class Books extends Component{
                     <hr/>
                     <SearchItems
                         itemList={this.state.books}
+                        libraryItems={this.props.libraryBooks}
                         addHandler={this.addToLibraryHandler}
+                        isAuthenticated={this.props.token !== null}
                     />
                     <hr/>
                     <NavigationButtons
@@ -118,7 +119,8 @@ class Books extends Component{
 const mapStateToProps = state => {
     return {
         token: state.auth.token,
-        userId: state.auth.userId
+        userId: state.auth.userId,
+        libraryBooks: state.library.books
     }
 };
 

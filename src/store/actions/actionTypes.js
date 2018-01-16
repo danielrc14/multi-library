@@ -24,3 +24,7 @@ export const REMOVE_LIBRARY_FAIL = 'REMOVE_LIBRARY_FAIL';
 
 //Library clear
 export const CLEAR_LIBRARY = 'CLEAR_LIBRARY';
+
+//Messages
+export const OPEN_MESSAGE = 'OPEN_MESSAGE';
+export const CLOSE_MESSAGE = 'CLOSE_MESSAGE';

@@ -12,3 +12,7 @@ export {
     removeLibrary,
     clearLibrary
 } from './library';
+export {
+    openMessage,
+    closeMessage
+} from './messages';

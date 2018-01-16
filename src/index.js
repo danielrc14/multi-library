@@ -10,12 +10,14 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import authReducer from './store/reducers/auth';
 import libraryReducer from './store/reducers/library';
+import messagesReducer from './store/reducers/messages';
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    library: libraryReducer
+    library: libraryReducer,
+    messages: messagesReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

@@ -7,7 +7,6 @@ import FontIcon from 'material-ui/FontIcon';
 
 import * as actions from '../../store/actions';
 import axiosMovies from '../../axiosInstances/movies';
-import axiosDatabase from '../../axiosInstances/database';
 import SearchItems from '../../components/SearchItems/SearchItems';
 import NavigationButtons from '../../components/NavigationButtons/NavigationButtons';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
@@ -75,7 +74,9 @@ class Movies extends Component{
                     <hr/>
                     <SearchItems
                         itemList={this.state.movies}
+                        libraryItems={this.props.libraryMovies}
                         addHandler={this.addToLibraryHandler}
+                        isAuthenticated={this.props.token !== null}
                     />
                     <hr/>
                     <NavigationButtons
@@ -117,7 +118,8 @@ class Movies extends Component{
 const mapStateToProps = state => {
     return {
         token: state.auth.token,
-        userId: state.auth.userId
+        userId: state.auth.userId,
+        libraryMovies: state.library.movies
     }
 };
 

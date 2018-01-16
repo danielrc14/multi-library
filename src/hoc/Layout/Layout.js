@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import Snackbar from 'material-ui/Snackbar';
 
 import './Layout.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
@@ -37,6 +38,12 @@ class Layout extends Component{
                 <main className='Main'>
                     {this.props.children}
                 </main>
+                <Snackbar
+                    open={this.props.messageOpen}
+                    message={this.props.message}
+                    autoHideDuration={4000}
+                    onRequestClose={this.props.onCloseMessage}
+                />
             </div>
         );
     }
@@ -48,7 +55,10 @@ const mapStateToProps = (state) => {
         userEmail: state.auth.userEmail,
         error: state.auth.error,
         loggingIn: state.auth.loggingIn,
-        registering: state.auth.registering
+        registering: state.auth.registering,
+        messageOpen: state.messages.open,
+        message: state.messages.message,
+        messageType: state.messages.messageType
     }
 };
 
@@ -57,6 +67,7 @@ const mapDispatchToProps = dispatch => {
         onOpenLogin: () => dispatch(actions.openLoginModal()),
         onOpenRegister: () => dispatch(actions.openRegisterModal()),
         onCloseModals: () => dispatch(actions.closeModals()),
+        onCloseMessage: () => dispatch(actions.closeMessage())
     }
 };
 

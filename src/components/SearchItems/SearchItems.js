@@ -11,6 +11,8 @@ const searchItems = props => {
                     key={item.id}
                     item={item}
                     addHandler={props.addHandler}
+                    added={props.libraryItems.filter(libraryItem => libraryItem.id === item.id).length > 0}
+                    isAuthenticated={props.isAuthenticated}
                 />
             })}
         </div>

@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axiosDatabase from '../../axiosInstances/database';
+import {openMessage} from "./messages";
 
 //**********************FETCH LIBRARY ITEMS**********************
 
@@ -37,13 +38,13 @@ export const fetchLibrary = (token, userId) => {
                     if(item.type === 'movie'){
                         fetchedMovies.push({
                             ...item.elemInfo,
-                            id: key
+                            dbId: key
                         });
                     }
                     else if(item.type === 'book'){
                         fetchedBooks.push({
                             ...item.elemInfo,
-                            id: key
+                            dbId: key
                         });
                     }
                 }
@@ -51,6 +52,7 @@ export const fetchLibrary = (token, userId) => {
             })
             .catch(err => {
                 dispatch(fetchLibraryFail(err));
+                dispatch(openMessage('Couldn\'t access library: ' + err.message, 'error'));
             });
     };
 };
@@ -88,9 +90,11 @@ export const addLibrary = (token, item, itemType, userId) => {
         })
             .then(response => {
                 dispatch(addLibrarySuccess(item, itemType));
+                dispatch(openMessage('Item added to library', 'success'));
             })
             .catch(err => {
                 dispatch(addLibraryFail(err));
+                dispatch(openMessage('Couldn\'t add item: ' + err.message, 'error'));
             })
     }
 };
@@ -121,12 +125,14 @@ export const removeLibraryStart = () =>{
 export const removeLibrary = (token, item, itemType) => {
     return dispatch => {
         dispatch(removeLibraryStart());
-        axiosDatabase.delete('/libraryItems/' + item.id + '.json?auth=' + token)
+        axiosDatabase.delete('/libraryItems/' + item.dbId + '.json?auth=' + token)
             .then(response => {
                 dispatch(removeLibrarySuccess(item, itemType));
+                dispatch(openMessage('Item removed from library', 'success'));
             })
             .catch(err => {
                 dispatch(removeLibraryFail(err));
+                dispatch(openMessage('Couldn\'t remove item: ' + err.message, 'error'));
             });
     }
 };

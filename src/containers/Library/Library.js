@@ -1,16 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import axiosDatabase from '../../axiosInstances/database';
 import LibraryItems from '../../components/LibraryItems/LibraryItems';
 import * as actions from '../../store/actions';
 
 class Library extends Component{
-    state = {
-        movies: [],
-        books: []
-    };
-
     componentDidMount(){
         this.props.onFetchLibrary(this.props.token, this.props.userId)
     };
