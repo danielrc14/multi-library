@@ -67,28 +67,46 @@ export const auth = (userData, isSignup) => {
             .then(response => {
                 //Get user in database
                 let userName = null;
-                axiosDatabase.get('/users/' + response.data.localId + '.json')
-                    .then(response2 => {
-                        userName = response2.data.name;
-
-                        const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
-                        localStorage.setItem('token', response.data.idToken);
-                        localStorage.setItem('expirationDate', expirationDate);
-                        localStorage.setItem('userId', response.data.localId);
-                        localStorage.setItem('userEmail', userData.email);
-                        localStorage.setItem('userName', userName);
-                        dispatch(authSuccess(response.data.idToken, response.data.localId, userData.email, userName));
-                        dispatch(checkAuthTimeout(response.data.expiresIn));
-                        dispatch(fetchLibrary(response.data.idToken, response.data.localId));
+                if(isSignup){
+                    thenAuth(dispatch, response, userData.name);
+                    axiosDatabase.post('/users.json?auth=' + response.data.idToken, {
+                        name: userData.name,
+                        email: userData.email
                     })
-                    .catch(err => {
-                        dispatch(authFail(err.response.data.error));
-                    });
+                        .then(response2 => {
+                        })
+                        .catch(err => {
+                            dispatch(authFail(err.response.data.error));
+                        });
+                }
+                else{
+                    axiosDatabase.get('/users/' + response.data.localId + '.json')
+                        .then(response2 => {
+                            userName = response2.data.name;
+
+                            thenAuth(dispatch, response, userName);
+                        })
+                        .catch(err => {
+                            dispatch(authFail(err.response.data.error));
+                        });
+                }
             })
             .catch(err => {
                 dispatch(authFail(err.response.data.error));
             })
     };
+};
+
+const thenAuth = (dispatch, response, userName) => {
+    const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+    localStorage.setItem('token', response.data.idToken);
+    localStorage.setItem('expirationDate', expirationDate);
+    localStorage.setItem('userId', response.data.localId);
+    localStorage.setItem('userEmail', response.data.email);
+    localStorage.setItem('userName', userName);
+    dispatch(authSuccess(response.data.idToken, response.data.localId, response.data.email, userName));
+    dispatch(checkAuthTimeout(response.data.expiresIn));
+    dispatch(fetchLibrary(response.data.idToken, response.data.localId));
 };
 
 export const openLoginModal = () => {

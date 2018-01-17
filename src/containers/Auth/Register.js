@@ -7,6 +7,19 @@ import * as actions from '../../store/actions';
 class Register extends BaseAuth{
     state = {
         controls: {
+            name: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your name'
+                },
+                value: '',
+                validation: {
+                    required: true
+                },
+                error: null,
+                touched: false
+            },
             email: {
                 elementType: 'input',
                 elementConfig: {
@@ -57,6 +70,7 @@ class Register extends BaseAuth{
     submitHandler = (event) => {
         event.preventDefault();
         this.props.onAuth({
+            name: this.state.controls.name.value,
             email: this.state.controls.email.value,
             password: this.state.controls.password.value,
             confirmPassword: this.state.controls.confirmPassword.value
