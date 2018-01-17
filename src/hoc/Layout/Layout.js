@@ -30,7 +30,7 @@ class Layout extends Component{
                     openLoginModal={this.props.onOpenLogin}
                     openRegisterModal={this.props.onOpenRegister}
                     isAuth={this.props.isAuthenticated}
-                    userEmail={this.props.userEmail}
+                    userName={this.props.userName}
                 />
                 <div>
                     <SideDrawer
@@ -55,7 +55,7 @@ class Layout extends Component{
 const mapStateToProps = (state) => {
     return {
         isAuthenticated: state.auth.token !== null,
-        userEmail: state.auth.userEmail,
+        userName: state.auth.userName,
         error: state.auth.error,
         loggingIn: state.auth.loggingIn,
         registering: state.auth.registering,

@@ -17,7 +17,7 @@ const toolbar = props => {
     if(props.isAuth){
         authButtons = (
             <ToolbarGroup>
-                <FlatButton label={props.userEmail}/>
+                <FlatButton label={props.userName}/>
                 <ToolbarSeparator/>
                 <Link to='/logout'>
                     <FlatButton label='Logout'/>

@@ -15,6 +15,17 @@ const libraryItem = props => {
         subtitle = props.item.releaseDate.split('-')[0]
     }
 
+    let button = null;
+    if(props.removeHandler){
+        button = (
+            <FlatButton
+                style={{color: red500}}
+                label="Remove"
+                onClick={() => props.removeHandler(props.item)}
+            />
+        );
+    }
+
     return(
         <div className='LibraryItem'>
             <img src={props.item.imagePath} alt="" />
@@ -28,11 +39,7 @@ const libraryItem = props => {
                     Rating: {props.item.rating}
                 </CardText>
                 <CardActions>
-                    <FlatButton
-                        style={{color: red500}}
-                        label="Remove"
-                        onClick={() => props.removeHandler(props.item)}
-                    />
+                    {button}
                 </CardActions>
             </Card>
         </div>

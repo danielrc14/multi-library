@@ -43,6 +43,7 @@ class App extends Component {
                             <Route path='/movies' component={Movies}/>
                             <Route path='/books' component={Books}/>
                             <Route path='/logout' component={Logout}/>
+                            <Route path='/library/:userId' component={Library}/>
                             {basePage}
                             {redirectPage}
                         </Switch>
