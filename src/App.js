@@ -13,6 +13,7 @@ import Movies from './containers/Movies/Movies';
 import Books from './containers/Books/Books';
 import Library from './containers/Library/Library';
 import Logout from './containers/Auth/Logout';
+import WelcomePage from './containers/WelcomePage/WelcomePage';
 
 class App extends Component {
     componentWillMount(){
@@ -27,6 +28,13 @@ class App extends Component {
             }
         });
 
+        let basePage = <Route path='/' component={WelcomePage}/>;
+        let redirectPage = null;
+        if(this.props.isAuthenticated){
+            basePage = <Route path='/library' component={Library}/>;
+            redirectPage = <Redirect from='/' to='/library'/>;
+        }
+
         return (
             <div>
                 <MuiThemeProvider muiTheme={muiTheme}>
@@ -34,9 +42,9 @@ class App extends Component {
                         <Switch>
                             <Route path='/movies' component={Movies}/>
                             <Route path='/books' component={Books}/>
-                            <Route path='/library' component={Library}/>
                             <Route path='/logout' component={Logout}/>
-                            <Redirect from='/' to='/library'/>
+                            {basePage}
+                            {redirectPage}
                         </Switch>
                     </Layout>
                 </MuiThemeProvider>
@@ -45,10 +53,16 @@ class App extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.auth.token !== null
+    }
+};
+
 const mapDispatchToProps = dispatch => {
     return {
         onTryAutoSignup: () => dispatch(actions.authCheckState())
     };
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

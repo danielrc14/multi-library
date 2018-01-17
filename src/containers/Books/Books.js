@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import * as actions from '../../store/actions';
 import axiosBooks from '../../axiosInstances/books';
@@ -16,7 +17,8 @@ class Books extends Component{
         books: [],
         searchStr: '',
         page: 1,
-        totalPages: 1
+        totalPages: 1,
+        loading: false
     };
 
     changePage = page => {
@@ -31,6 +33,8 @@ class Books extends Component{
     };
 
     searchSubmittedHandler = (page) => {
+        this.setState({loading: true});
+
         axiosBooks.get('/volumes', {
             params: {
                 q: this.state.searchStr.trim(),
@@ -51,8 +55,13 @@ class Books extends Component{
                 });
                 this.setState({
                     books: newBooks,
-                    totalPages: Math.ceil(response.data.totalItems)
+                    totalPages: Math.ceil(response.data.totalItems),
+                    loading: false
                 });
+            })
+            .catch(err => {
+                this.props.onOpenMessage('Couldn\'t get results: ' + err.message)
+                this.setState({loading: false});
             })
     };
 
@@ -69,24 +78,34 @@ class Books extends Component{
     render(){
         let searchResults = null;
 
-        if(this.state.books.length > 0){
+        if(this.state.loading){
             searchResults = (
                 <Wrapper>
                     <hr/>
-                    <SearchItems
-                        itemList={this.state.books}
-                        libraryItems={this.props.libraryBooks}
-                        addHandler={this.addToLibraryHandler}
-                        isAuthenticated={this.props.token !== null}
-                    />
-                    <hr/>
-                    <NavigationButtons
-                        page={this.state.page}
-                        totalPages={this.state.totalPages}
-                        changePage={this.changePage}
-                    />
+                    <CircularProgress size={80} thickness={5} />
                 </Wrapper>
             )
+        }
+        else{
+            if(this.state.books.length > 0){
+                searchResults = (
+                    <Wrapper>
+                        <hr/>
+                        <SearchItems
+                            itemList={this.state.books}
+                            libraryItems={this.props.libraryBooks}
+                            addHandler={this.addToLibraryHandler}
+                            isAuthenticated={this.props.token !== null}
+                        />
+                        <hr/>
+                        <NavigationButtons
+                            page={this.state.page}
+                            totalPages={this.state.totalPages}
+                            changePage={this.changePage}
+                        />
+                    </Wrapper>
+                )
+            }
         }
 
         const paperStyle = {
@@ -126,7 +145,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddLibrary: (token, item, userId) => dispatch(actions.addLibrary(token, item, 'book', userId))
+        onAddLibrary: (token, item, userId) => dispatch(actions.addLibrary(token, item, 'book', userId)),
+        onOpenMessage: (message, messageType) => dispatch(actions.openMessage(message, messageType))
     }
 };
 

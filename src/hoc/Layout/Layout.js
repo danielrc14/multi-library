@@ -33,7 +33,10 @@ class Layout extends Component{
                     userEmail={this.props.userEmail}
                 />
                 <div>
-                    <SideDrawer style={{marginTop: '60px'}}/>
+                    <SideDrawer
+                        style={{marginTop: '60px'}}
+                        isAuthenticated={this.props.isAuthenticated}
+                    />
                 </div>
                 <main className='Main'>
                     {this.props.children}

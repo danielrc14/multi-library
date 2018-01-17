@@ -6,11 +6,18 @@ import {NavLink} from 'react-router-dom';
 import './SideDrawer.css';
 
 const sideDrawer = props => {
-    return (
-        <Drawer containerClassName='SideDrawer'>
+    let libraryLink = null;
+    if(props.isAuthenticated){
+        libraryLink = (
             <NavLink to='/library'>
                 <MenuItem>My Library</MenuItem>
             </NavLink>
+        );
+    }
+
+    return (
+        <Drawer containerClassName='SideDrawer'>
+            {libraryLink}
             <NavLink to='/movies'>
                 <MenuItem>Movies</MenuItem>
             </NavLink>

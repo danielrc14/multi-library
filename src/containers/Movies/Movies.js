@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import * as actions from '../../store/actions';
 import axiosMovies from '../../axiosInstances/movies';
@@ -16,7 +17,8 @@ class Movies extends Component{
         movies: [],
         searchStr: '',
         page: 1,
-        totalPages: 1
+        totalPages: 1,
+        loading: false
     };
     posterBaseURL = 'https://image.tmdb.org/t/p/w500';
 
@@ -32,6 +34,8 @@ class Movies extends Component{
     };
 
     searchSubmittedHandler = (page) => {
+        this.setState({loading: true});
+
         axiosMovies.get('/search/movie', {
             params: {
                 query: this.state.searchStr.trim(),
@@ -50,8 +54,13 @@ class Movies extends Component{
                 });
                 this.setState({
                     movies: newMovies,
-                    totalPages: response.data.total_pages
+                    totalPages: response.data.total_pages,
+                    loading: false
                 });
+            })
+            .catch(err => {
+                this.props.onOpenMessage('Couldn\'t get results: ' + err.message);
+                this.setState({loading: false});
             })
     };
 
@@ -68,24 +77,34 @@ class Movies extends Component{
     render(){
         let searchResults = null;
 
-        if(this.state.movies.length > 0){
+        if(this.state.loading){
             searchResults = (
                 <Wrapper>
                     <hr/>
-                    <SearchItems
-                        itemList={this.state.movies}
-                        libraryItems={this.props.libraryMovies}
-                        addHandler={this.addToLibraryHandler}
-                        isAuthenticated={this.props.token !== null}
-                    />
-                    <hr/>
-                    <NavigationButtons
-                        page={this.state.page}
-                        totalPages={this.state.totalPages}
-                        changePage={this.changePage}
-                    />
+                    <CircularProgress size={80} thickness={5} />
                 </Wrapper>
             )
+        }
+        else{
+            if(this.state.movies.length > 0){
+                searchResults = (
+                    <Wrapper>
+                        <hr/>
+                        <SearchItems
+                            itemList={this.state.movies}
+                            libraryItems={this.props.libraryMovies}
+                            addHandler={this.addToLibraryHandler}
+                            isAuthenticated={this.props.token !== null}
+                        />
+                        <hr/>
+                        <NavigationButtons
+                            page={this.state.page}
+                            totalPages={this.state.totalPages}
+                            changePage={this.changePage}
+                        />
+                    </Wrapper>
+                )
+            }
         }
 
         const paperStyle = {
@@ -125,7 +144,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddLibrary: (token, item, userId) => dispatch(actions.addLibrary(token, item, 'movie', userId))
+        onAddLibrary: (token, item, userId) => dispatch(actions.addLibrary(token, item, 'movie', userId)),
+        onOpenMessage: (message, messageType) => dispatch(actions.openMessage(message, messageType))
     }
 };
 
