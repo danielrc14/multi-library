@@ -123,7 +123,7 @@ class Library extends Component{
             shareLink = (
                 <Paper style={paperStyle} zDepth={3}>
                     <span style={{marginRight: '10px'}}>Share link:</span>
-                    <TextField value={window.location.href + '/' + this.props.userId} type='text'/>
+                    <TextField id='share_link' value={window.location.href + '/' + this.props.userId} type='text'/>
                     <CopyClipboard text={window.location.href + '/' + this.props.userId}>
                         <IconButton>
                             <FontIcon className="material-icons">content_copy</FontIcon>

@@ -5,7 +5,9 @@ const initialState = {
     movies: [],
     books: [],
     error: null,
-    loading: false
+    loading: false,
+    loadingAdd: false,
+    loadingRemove: false
 };
 
 //**********************FETCH LIBRARY ITEMS**********************
@@ -38,7 +40,7 @@ const fetchLibraryFail = (state, action) => {
 const addLibraryStart = (state, action) => {
     return updateObject(state, {
         error: null,
-        loading: true
+        loadingAdd: true
     })
 };
 
@@ -56,14 +58,14 @@ const addLibrarySuccess = (state, action) => {
     return updateObject(state, {
         [arrayName]: newArray,
         error: null,
-        loading: false
+        loadingAdd: false
     })
 };
 
 const addLibraryFail = (state, action) => {
     return updateObject(state, {
         error: action.error,
-        loading: false
+        loadingAdd: false
     })
 };
 
@@ -72,7 +74,7 @@ const addLibraryFail = (state, action) => {
 const removeLibraryStart = (state, action) => {
     return updateObject(state, {
         error: null,
-        loading: true
+        loadingRemove: true
     });
 };
 
@@ -93,14 +95,14 @@ const removeLibrarySuccess = (state, action) => {
     return updateObject(state, {
         [arrayName]: newArray,
         error: null,
-        loading: false
+        loadingRemove: false
     });
 };
 
 const removeLibraryFail = (state, action) => {
     return updateObject(state, {
         error: action.error,
-        loading: false
+        loadingRemove: false
     });
 };
 
@@ -111,7 +113,9 @@ const clearLibrary = (state, action) => {
         movies: [],
         books: [],
         error: null,
-        loading: false
+        loading: false,
+        loadingAdd: false,
+        loadingRemove: false
     })
 };
 
